@@ -4,6 +4,7 @@ import os
 import sys
 import tensorflow as tf
 
+"""jordan Lieber"""
 from sklearn.model_selection import train_test_split
 
 EPOCHS = 10
