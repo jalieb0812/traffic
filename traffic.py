@@ -5,7 +5,7 @@ import sys
 import tensorflow as tf
 
 
-"""jordan Lieber"""
+"""jordan Lieber cs50ai project5 Traffic"""
 from sklearn.model_selection import train_test_split
 
 EPOCHS = 10
@@ -38,6 +38,8 @@ def main():
 
     # Evaluate neural network performance
     model.evaluate(x_test,  y_test, verbose=2)
+
+    print(model.summary())
 
     # Save model to file
     if len(sys.argv) == 3:
@@ -80,11 +82,9 @@ def load_data(data_dir):
                 images.append(image)
                 #print(image.shape)
 
-
-
     #print(f"images: {images} \n")
     #print(f"labels: {labels} \n")
-    print(images[0])
+    #print(images[0])
 
         #print(folder)
         #print(folder_path)
@@ -99,20 +99,45 @@ def get_model():
     The output layer should have `NUM_CATEGORIES` units, one for each category.
     """
 
+
     model = tf.keras.models.Sequential([
+
+    tf.keras.layers.Conv2D(32, (3, 3), activation = 'relu',
+                        input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+
+    tf.keras.layers.MaxPooling2D(pool_size=(1,1)),
+
+
 
     tf.keras.layers.Conv2D(32, (3,3), activation = 'relu',
                         input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
 
-    tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
+    tf.keras.layers.MaxPooling2D(pool_size=(1,1)),
+
+    tf.keras.layers.Conv2D(64, (3,3), activation = 'relu',
+                        input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+
+    tf.keras.layers.MaxPooling2D(pool_size=(1,1)),
+
+    #tf.keras.layers.Conv2D(64, (3,3), activation = 'relu',
+                        #input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+
+    #tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
+
 
     tf.keras.layers.Flatten(),
 
+    tf.keras.layers.Dropout(0.50),
+
     tf.keras.layers.Dense(128, activation = 'relu'),
+
+
+    tf.keras.layers.Dense(256, activation = 'relu'),
 
     tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax")
 
     ])
+
 
     # Train neural network
     model.compile(
