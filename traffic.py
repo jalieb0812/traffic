@@ -4,6 +4,7 @@ import os
 import sys
 import tensorflow as tf
 
+
 """jordan Lieber"""
 from sklearn.model_selection import train_test_split
 
@@ -71,11 +72,11 @@ def load_data(data_dir):
             image_files = os.listdir(folder_path)
             for image_file in image_files:
                 #set flag to 1 meaing color photo
-                image = cv2.imread(os.path.join(folder_path, image_file), 1)
+                image = cv2.imread(os.path.join(folder_path, image_file), cv2.IMREAD_COLOR)
                 image = cv2.resize(image, (IMG_WIDTH, IMG_HEIGHT),
                             interpolation = cv2.INTER_AREA)
 
-                labels.append(folder)
+                labels.append(int(folder))
                 images.append(image)
                 #print(image.shape)
 
@@ -83,12 +84,12 @@ def load_data(data_dir):
 
     #print(f"images: {images} \n")
     #print(f"labels: {labels} \n")
-    #print(images[0].shape)
+    print(images[0])
 
         #print(folder)
         #print(folder_path)
 
-    return(images, labels)
+    return images, labels
 
 
 def get_model():
@@ -97,7 +98,32 @@ def get_model():
     `input_shape` of the first layer is `(IMG_WIDTH, IMG_HEIGHT, 3)`.
     The output layer should have `NUM_CATEGORIES` units, one for each category.
     """
-    raise NotImplementedError
+
+    model = tf.keras.models.Sequential([
+
+    tf.keras.layers.Conv2D(32, (3,3), activation = 'relu',
+                        input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+
+    tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
+
+    tf.keras.layers.Flatten(),
+
+    tf.keras.layers.Dense(128, activation = 'relu'),
+
+    tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax")
+
+    ])
+
+    # Train neural network
+    model.compile(
+        optimizer="adam",
+        loss="categorical_crossentropy",
+        metrics=["accuracy"]
+    )
+
+
+
+    return model
 
 
 if __name__ == "__main__":
