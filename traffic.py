@@ -3,10 +3,14 @@ import numpy as np
 import os
 import sys
 import tensorflow as tf
+#from tensorflow import keras
+
 
 
 """jordan Lieber cs50ai project5 Traffic"""
 from sklearn.model_selection import train_test_split
+
+
 
 EPOCHS = 10
 IMG_WIDTH = 30
@@ -33,14 +37,17 @@ def main():
     # Get a compiled neural network
     model = get_model()
 
+    #model = tf.keras.models.load_model('test_model')
+
     # Fit model on training data
     model.fit(x_train, y_train, epochs=EPOCHS)
 
     # Evaluate neural network performance
     model.evaluate(x_test,  y_test, verbose=2)
 
-    print(model.summary())
 
+
+    """remeber to change this back!"""
     # Save model to file
     if len(sys.argv) == 3:
         filename = sys.argv[2]
@@ -110,13 +117,13 @@ def get_model():
 
 
     tf.keras.layers.Conv2D(32, (3,3), activation = 'relu',
-                        input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
-
+                         input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+    #
     tf.keras.layers.MaxPooling2D(pool_size=(1,1)),
-
+    #
     tf.keras.layers.Conv2D(64, (3,3), activation = 'relu',
-                        input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
-
+                         input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+    #
     tf.keras.layers.MaxPooling2D(pool_size=(1,1)),
 
     #tf.keras.layers.Conv2D(64, (3,3), activation = 'relu',
